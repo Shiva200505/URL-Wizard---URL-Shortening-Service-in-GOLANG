@@ -52,25 +52,23 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/">
-                <a>
-                  <Logo />
-                </a>
-              </Link>
+              <div onClick={() => navigate("/")} className="cursor-pointer">
+                <Logo />
+              </div>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navItems.map((item) => (
-                <Link key={item.name} href={item.href}>
-                  <a
-                    className={`${
-                      location === item.href
-                        ? "border-primary text-primary"
-                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                    } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors`}
-                  >
-                    {item.name}
-                  </a>
-                </Link>
+                <button
+                  key={item.name}
+                  onClick={() => navigate(item.href)}
+                  className={`${
+                    location === item.href
+                      ? "border-primary text-primary"
+                      : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors`}
+                >
+                  {item.name}
+                </button>
               ))}
             </div>
           </div>
@@ -96,21 +94,23 @@ export default function Navbar() {
                         Signed in as {user.username}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem asChild>
-                        <Link href="/dashboard">
-                          <div className="flex items-center w-full">
-                            <LayoutDashboardIcon className="mr-2 h-4 w-4" />
-                            Dashboard
-                          </div>
-                        </Link>
+                      <DropdownMenuItem>
+                        <div 
+                          className="flex items-center w-full cursor-pointer"
+                          onClick={() => navigate("/dashboard")}
+                        >
+                          <LayoutDashboardIcon className="mr-2 h-4 w-4" />
+                          Dashboard
+                        </div>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href="/settings">
-                          <div className="flex items-center w-full">
-                            <UserIcon className="mr-2 h-4 w-4" />
-                            Profile
-                          </div>
-                        </Link>
+                      <DropdownMenuItem>
+                        <div 
+                          className="flex items-center w-full cursor-pointer"
+                          onClick={() => navigate("/settings")}
+                        >
+                          <UserIcon className="mr-2 h-4 w-4" />
+                          Profile
+                        </div>
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={handleLogout}>
@@ -123,12 +123,12 @@ export default function Navbar() {
               </>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link href="/auth">
-                  <Button variant="ghost">Sign in</Button>
-                </Link>
-                <Link href="/auth">
-                  <Button>Get Started</Button>
-                </Link>
+                <Button variant="ghost" onClick={() => navigate("/auth")}>
+                  Sign in
+                </Button>
+                <Button onClick={() => navigate("/auth")}>
+                  Get Started
+                </Button>
               </div>
             )}
           </div>
@@ -162,29 +162,32 @@ export default function Navbar() {
       >
         <div className="pt-2 pb-3 space-y-1">
           {navItems.map((item) => (
-            <Link key={item.name} href={item.href}>
-              <a
-                className={`${
-                  location === item.href
-                    ? "bg-primary border-primary text-white"
-                    : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-                } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {item.name}
-              </a>
-            </Link>
+            <button
+              key={item.name}
+              className={`${
+                location === item.href
+                  ? "bg-primary border-primary text-white"
+                  : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
+              } block w-full text-left pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate(item.href);
+              }}
+            >
+              {item.name}
+            </button>
           ))}
 
           {!user && (
-            <Link href="/auth">
-              <a
-                className="block w-full text-center px-4 py-2 bg-primary text-white rounded-md shadow-sm mt-3"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Sign in
-              </a>
-            </Link>
+            <button
+              className="block w-full text-center px-4 py-2 bg-primary text-white rounded-md shadow-sm mt-3"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate("/auth");
+              }}
+            >
+              Sign in
+            </button>
           )}
         </div>
 
@@ -201,22 +204,24 @@ export default function Navbar() {
               </div>
             </div>
             <div className="mt-3 space-y-1">
-              <Link href="/dashboard">
-                <a
-                  className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Dashboard
-                </a>
-              </Link>
-              <Link href="/settings">
-                <a
-                  className="block pl-3 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Profile
-                </a>
-              </Link>
+              <button
+                className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/dashboard");
+                }}
+              >
+                Dashboard
+              </button>
+              <button
+                className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  navigate("/settings");
+                }}
+              >
+                Profile
+              </button>
               <button
                 className="block w-full text-left pl-3 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800"
                 onClick={() => {
