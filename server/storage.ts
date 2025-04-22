@@ -3,11 +3,16 @@ import {
   shortUrls, type ShortUrl, type InsertShortUrl,
   clickEvents, type ClickEvent, type InsertClickEvent
 } from "@shared/schema";
+import session from "express-session";
+import createMemoryStore from "memorystore";
+
+const MemoryStore = createMemoryStore(session);
 
 // modify the interface with any CRUD methods
 // you might need
 
 export interface IStorage {
+  sessionStore: session.Store;
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
@@ -40,6 +45,7 @@ export class MemStorage implements IStorage {
   currentUserId: number;
   currentShortUrlId: number;
   currentClickEventId: number;
+  sessionStore: session.Store;
 
   constructor() {
     this.users = new Map();
@@ -49,6 +55,9 @@ export class MemStorage implements IStorage {
     this.currentUserId = 1;
     this.currentShortUrlId = 1;
     this.currentClickEventId = 1;
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000 // Prune expired entries every 24h
+    });
   }
 
   async getUser(id: number): Promise<User | undefined> {
@@ -135,8 +144,11 @@ export class MemStorage implements IStorage {
   async createClickEvent(insertClickEvent: InsertClickEvent): Promise<ClickEvent> {
     const id = this.currentClickEventId++;
     const clickEvent: ClickEvent = {
-      ...insertClickEvent,
       id,
+      shortUrlId: insertClickEvent.shortUrlId,
+      referrer: insertClickEvent.referrer || null,
+      userAgent: insertClickEvent.userAgent || null,
+      device: insertClickEvent.device || null,
       timestamp: new Date(),
     };
     

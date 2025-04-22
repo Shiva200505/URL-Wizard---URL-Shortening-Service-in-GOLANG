@@ -7,6 +7,9 @@ import { ThemeProvider } from "next-themes";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import Dashboard from "@/pages/Dashboard";
+import AuthPage from "@/pages/auth-page";
+import { ProtectedRoute } from "./lib/protected-route";
+import { AuthProvider } from "./hooks/use-auth";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Router() {
@@ -14,7 +17,8 @@ function Router() {
     <AnimatePresence mode="wait">
       <Switch>
         <Route path="/" component={Home} />
-        <Route path="/dashboard" component={Dashboard} />
+        <ProtectedRoute path="/dashboard" component={Dashboard} />
+        <Route path="/auth" component={AuthPage} />
         <Route component={NotFound} />
       </Switch>
     </AnimatePresence>
@@ -25,17 +29,19 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light">
-        <TooltipProvider>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Toaster />
-            <Router />
-          </motion.div>
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Toaster />
+              <Router />
+            </motion.div>
+          </TooltipProvider>
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
