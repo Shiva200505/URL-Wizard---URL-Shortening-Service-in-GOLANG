@@ -81,6 +81,33 @@ func (r *Repository) GetShortURLBySlug(ctx context.Context, slug string) (*model
         return &shortURL, nil
 }
 
+// GetAllShortURLs retrieves all short URLs for a specific user
+func (r *Repository) GetAllShortURLs(ctx context.Context, userID primitive.ObjectID) ([]models.ShortURL, error) {
+        if r.useMemoryRepo {
+                return r.memoryRepo.GetAllShortURLs(ctx, userID)
+        }
+        
+        collection := r.db.GetCollection(ShortURLCollection)
+        
+        // Find all documents for this user
+        findOptions := options.Find()
+        findOptions.SetSort(bson.D{{"createdAt", -1}}) // Sort by creation date, newest first
+        
+        cursor, err := collection.Find(ctx, bson.M{"userId": userID}, findOptions)
+        if err != nil {
+                return nil, err
+        }
+        defer cursor.Close(ctx)
+        
+        // Decode the documents
+        var shortURLs []models.ShortURL
+        if err := cursor.All(ctx, &shortURLs); err != nil {
+                return nil, err
+        }
+        
+        return shortURLs, nil
+}
+
 // CreateShortURL creates a new short URL
 func (r *Repository) CreateShortURL(ctx context.Context, shortURL models.ShortURL) (*models.ShortURL, error) {
         if r.useMemoryRepo {
@@ -104,33 +131,6 @@ func (r *Repository) CreateShortURL(ctx context.Context, shortURL models.ShortUR
         shortURL.ID = result.InsertedID.(primitive.ObjectID)
         
         return &shortURL, nil
-}
-
-// GetAllShortURLs retrieves all short URLs
-func (r *Repository) GetAllShortURLs(ctx context.Context) ([]models.ShortURL, error) {
-        if r.useMemoryRepo {
-                return r.memoryRepo.GetAllShortURLs(ctx)
-        }
-        
-        collection := r.db.GetCollection(ShortURLCollection)
-        
-        // Find all documents
-        findOptions := options.Find()
-        findOptions.SetSort(bson.D{{"createdAt", -1}}) // Sort by creation date, newest first
-        
-        cursor, err := collection.Find(ctx, bson.M{}, findOptions)
-        if err != nil {
-                return nil, err
-        }
-        defer cursor.Close(ctx)
-        
-        // Decode the documents
-        var shortURLs []models.ShortURL
-        if err := cursor.All(ctx, &shortURLs); err != nil {
-                return nil, err
-        }
-        
-        return shortURLs, nil
 }
 
 // UpdateShortURLClicks increments the click count for a short URL

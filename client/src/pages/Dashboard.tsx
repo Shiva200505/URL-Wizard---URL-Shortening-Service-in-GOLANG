@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import StatsOverview from "@/components/StatsOverview";
 import RecentLinks from "@/components/RecentLinks";
-import AnalyticsDashboard from "@/components/AnalyticsDashboard";
 import Footer from "@/components/Footer";
 
 export default function Dashboard() {
@@ -19,7 +18,6 @@ export default function Dashboard() {
           >
             <StatsOverview />
             <RecentLinks />
-            <AnalyticsDashboard />
           </motion.div>
         </div>
       </main>

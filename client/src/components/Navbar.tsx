@@ -29,9 +29,7 @@ export default function Navbar() {
 
   const navItems = user ? [
     { name: "Home", href: "/" },
-    { name: "Dashboard", href: "/dashboard" },
-    { name: "My Links", href: "/dashboard" },
-    { name: "Analytics", href: "/dashboard" },
+    { name: "My Links", href: "/dashboard" }
   ] : [
     { name: "Home", href: "/" },
     { name: "Features", href: "/#features" },

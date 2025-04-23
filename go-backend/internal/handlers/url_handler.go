@@ -27,6 +27,13 @@ func NewURLHandler(repo *database.Repository) *URLHandler {
 
 // CreateShortURL handles the creation of a new short URL
 func (h *URLHandler) CreateShortURL(w http.ResponseWriter, r *http.Request) {
+        // Get user ID from context (set by auth middleware)
+        userID, ok := r.Context().Value("userID").(primitive.ObjectID)
+        if !ok {
+                http.Error(w, "Unauthorized", http.StatusUnauthorized)
+                return
+        }
+
         // Parse the request body
         var req models.URLRequest
         err := json.NewDecoder(r.Body).Decode(&req)
@@ -94,6 +101,7 @@ func (h *URLHandler) CreateShortURL(w http.ResponseWriter, r *http.Request) {
 
         // Create the short URL object
         shortURL := models.ShortURL{
+                UserID:      userID,
                 OriginalURL: req.OriginalURL,
                 Slug:        req.Slug,
                 ExpiresAt:   expiresAt,
@@ -142,10 +150,17 @@ func (h *URLHandler) GetShortURL(w http.ResponseWriter, r *http.Request) {
         json.NewEncoder(w).Encode(shortURL)
 }
 
-// GetAllShortURLs retrieves all short URLs
+// GetAllShortURLs handles retrieving all short URLs for the current user
 func (h *URLHandler) GetAllShortURLs(w http.ResponseWriter, r *http.Request) {
-        // Get all short URLs from the database
-        shortURLs, err := h.repo.GetAllShortURLs(r.Context())
+        // Get user ID from context (set by auth middleware)
+        userID, ok := r.Context().Value("userID").(primitive.ObjectID)
+        if !ok {
+                http.Error(w, "Unauthorized", http.StatusUnauthorized)
+                return
+        }
+
+        // Get all short URLs for this user
+        shortURLs, err := h.repo.GetAllShortURLs(r.Context(), userID)
         if err != nil {
                 http.Error(w, "Error retrieving short URLs", http.StatusInternalServerError)
                 return

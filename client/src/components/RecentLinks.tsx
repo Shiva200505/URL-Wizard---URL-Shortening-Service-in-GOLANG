@@ -28,6 +28,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useAuth } from "@/hooks/use-auth";
 
 type ShortUrl = {
   id: number;
@@ -44,9 +45,11 @@ export default function RecentLinks() {
   const { toast } = useToast();
   const { copy } = useClipboard();
   const [deleteUrlId, setDeleteUrlId] = useState<number | null>(null);
+  const { user } = useAuth();
 
   const { data: links = [], isLoading } = useQuery<ShortUrl[]>({
     queryKey: ["/api/urls"],
+    enabled: !!user,
   });
 
   const deleteMutation = useMutation({
@@ -266,14 +269,6 @@ export default function RecentLinks() {
                             title="Copy link"
                           >
                             <Copy className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-gray-500 hover:text-primary transition-colors"
-                            title="View analytics"
-                          >
-                            <BarChart2 className="h-4 w-4" />
                           </Button>
                           <Button
                             variant="ghost"

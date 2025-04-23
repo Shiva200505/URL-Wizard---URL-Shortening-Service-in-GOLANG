@@ -9,6 +9,7 @@ import (
 // ShortURL represents a shortened URL record
 type ShortURL struct {
 	ID          primitive.ObjectID  `bson:"_id,omitempty" json:"id"`
+	UserID      primitive.ObjectID  `bson:"userId" json:"userId"`
 	OriginalURL string              `bson:"originalUrl" json:"originalUrl"`
 	Slug        string              `bson:"slug" json:"slug"`
 	Clicks      int                 `bson:"clicks" json:"clicks"`

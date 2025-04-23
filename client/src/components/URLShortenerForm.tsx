@@ -5,7 +5,7 @@ import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useClipboard } from "@/hooks/use-clipboard";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { Link2, Copy, Check, Share2, QrCode } from "lucide-react";
 import {
@@ -121,6 +121,7 @@ export default function URLShortenerForm() {
   const [shortenedUrl, setShortenedUrl] = useState<string | null>(null);
   const { toast } = useToast();
   const { copy } = useClipboard();
+  const queryClient = useQueryClient();
   
   const form = useForm<UrlFormValues>({
     resolver: zodResolver(urlFormSchema),
@@ -140,6 +141,7 @@ export default function URLShortenerForm() {
       const shortUrl = `${host}/api/r/${data.slug}`;
       
       setShortenedUrl(shortUrl);
+      queryClient.invalidateQueries({ queryKey: ["/api/urls"] });
       toast({
         title: "URL shortened successfully!",
         description: "Your link is now ready to share.",
