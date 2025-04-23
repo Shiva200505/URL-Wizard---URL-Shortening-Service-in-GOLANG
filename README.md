@@ -5,20 +5,16 @@ URL Wizard is a modern, full-stack URL shortening service built with Go and Reac
 ## 📸 Screenshots
 
 ### 🎯 Dashboard
-![URL Wizard Dashboard](docs/images/dashboard.png)
+![image](https://github.com/user-attachments/assets/c4602e90-5675-47a4-b43a-45df6b872cba)
 *The main dashboard showing your shortened URLs and analytics*
 
 ### ✨ URL Creation
-![URL Creation](docs/images/url-creation.png)
+![image](https://github.com/user-attachments/assets/69680b8a-48b4-46ce-a59c-c1bdd5cfeaa8)
 *Create new shortened URLs with custom slugs and expiration dates*
 
-### 📊 Analytics
-![Analytics](docs/images/analytics.png)
+### 👤 Login
+![image](https://github.com/user-attachments/assets/46fc904e-494b-4b5b-8577-80fcf0278cfb)
 *Detailed analytics for your shortened URLs*
-
-### 📱 Mobile View
-![Mobile View](docs/images/mobile-view.png)
-*Responsive design works perfectly on mobile devices*
 
 ## ✨ Features
 
