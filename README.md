@@ -53,7 +53,7 @@ URL Wizard is a modern, full-stack URL shortening service built with Go and Reac
 
 1. 📥 Clone the repository:
 ```bash
-git clone https://github.com/yourusername/urlwizard.git
+git clone (https://github.com/Shiva200505/URL-Wizard---URL-Shortening-Service-in-GOLANG.git)
 cd urlwizard
 ```
 
@@ -90,11 +90,6 @@ go run cmd/server/main.go
 cd client
 npm run dev
 ```
-
-The application will be available at:
-- 🌐 Frontend: http://localhost:5173
-- 🔌 Backend API: http://localhost:5001
-
 ## 🔌 API Endpoints
 
 ### 🔐 Authentication
